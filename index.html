@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#faf6f1" />
+
+  <title>2026 泰國之旅｜個人行程查詢</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-1: #faf6ec;
+      --bg-2: #f4ecdd;
+
+      --surface: #ffffff;
+      --surface-soft: #fbf6ef;
+      --hairline: rgba(58, 53, 48, 0.08);
+      --hairline-strong: rgba(58, 53, 48, 0.16);
+
+      --text: #3a3530;
+      --text-soft: #6e655e;
+      --text-mute: #a39a92;
+
+      /* 預設主色：泰國金 */
+      --accent: #c9a94e;
+      --accent-deep: #977a25;
+      --accent-ghost: rgba(201, 169, 78, 0.16);
+
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft: 0 1px 0 rgba(255,255,255,0.6) inset, 0 12px 40px rgba(60, 50, 45, 0.08);
+      --shadow-input: inset 0 1px 2px rgba(60, 50, 45, 0.05);
+
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
+      font-size: 18px;
+      line-height: 1.65;
+      min-height: 100vh;
+      background:
+        radial-gradient(52% 42% at 18% 0%, rgba(226, 200, 148, 0.22), transparent 64%),
+        radial-gradient(46% 38% at 100% 24%, rgba(224, 208, 182, 0.20), transparent 64%),
+        radial-gradient(44% 36% at 50% 100%, rgba(222, 206, 178, 0.24), transparent 64%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .page { width: 100%; max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* ============ Hero ============ */
+    .hero { text-align: center; padding: 24px 12px 34px; }
+
+    .event-name {
+      display: inline-block;
+      padding: 7px 20px;
+      border-radius: 999px;
+      background: linear-gradient(100deg, #c9a94e 0%, #b98a3e 100%);
+      color: #fff;
+      font-size: 14px; font-weight: 700; letter-spacing: .14em;
+      box-shadow: 0 6px 18px rgba(151, 122, 37, .22);
+    }
+
+    .main-title {
+      margin: 20px 0 8px;
+      font-family: "Noto Sans TC", "Inter", sans-serif;
+      font-size: clamp(40px, 7vw, 60px);
+      font-weight: 300; letter-spacing: 0.18em; line-height: 1.15;
+    }
+    .main-title .accent { font-weight: 500; color: var(--accent-deep); }
+
+    .en-title {
+      font-family: "Inter", sans-serif;
+      font-size: clamp(10px, 2.5vw, 12px);
+      font-weight: 600; letter-spacing: .28em;
+      color: var(--text-mute); text-transform: uppercase;
+      word-break: break-word;
+    }
+
+    .sub-title { margin: 12px 0 0; font-size: 15px; letter-spacing: 0.22em; color: var(--text-soft); }
+
+    .trip-date {
+      display: inline-flex; align-items: center; gap: 9px;
+      margin-top: 12px; padding: 6px 18px; border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(201,169,78,.5);
+      font-family: "Inter", sans-serif;
+      font-size: 15px; font-weight: 700; letter-spacing: .06em;
+      color: var(--accent-deep);
+    }
+    .trip-date::before { content: "✈"; color: var(--accent); }
+
+    .slogan {
+      margin: 16px auto 0; max-width: 520px;
+      font-size: clamp(16px, 4vw, 19px); font-weight: 600;
+      letter-spacing: .05em; color: var(--text);
+    }
+    .slogan .hl {
+      background: linear-gradient(180deg, transparent 62%, rgba(201,169,78,.42) 62%);
+      padding: 0 2px;
+    }
+
+    /* ============ 泰國剪影 ============ */
+    .skyline { margin: 30px auto 0; width: 100%; max-width: 640px; display: block; opacity: 0.8; }
+    .skyline path, .skyline circle, .skyline line, .skyline rect, .skyline polyline {
+      stroke: var(--accent-deep); fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .skyline .sea { stroke: var(--accent); stroke-width: 1; opacity: 0.6; }
+    .skyline .glow { fill: var(--accent); opacity: 0.16; stroke: none; }
+
+    /* 主視覺輕動畫：太陽閃耀、棕櫚葉擺動、長尾船漂浮 */
+    @keyframes sunPulse  { 0%,100% { opacity: .12; transform: scale(1); }  50% { opacity: .3;  transform: scale(1.06); } }
+    @keyframes rayTwinkle{ 0%,100% { opacity: .35; }                        50% { opacity: .85; } }
+    @keyframes leafSway  { 0%,100% { transform: rotate(-2deg); }            50% { transform: rotate(2deg); } }
+    @keyframes boatFloat { 0%,100% { transform: translateY(0); }            50% { transform: translateY(-3px); } }
+
+    #sunCore     { transform-box: fill-box; transform-origin: center; animation: sunPulse 5s ease-in-out infinite; }
+    #sunRays     { animation: rayTwinkle 4.5s ease-in-out infinite; }
+    .palm-leaves { transform-box: fill-box; transform-origin: bottom center; animation: leafSway 5s ease-in-out infinite; }
+    #boat        { transform-box: fill-box; transform-origin: center; animation: boatFloat 4.5s ease-in-out infinite; }
+
+    /* ============ Cards ============ */
+    .card {
+      position: relative; margin-top: 24px; padding: 32px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      box-shadow: var(--shadow-soft);
+    }
+    @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+      .card {
+        background: rgba(255, 255, 255, 0.66);
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border-color: rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    .card-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.32em;
+      text-transform: uppercase; color: var(--text-mute); margin-bottom: 18px;
+    }
+    .card-label::before { content: ""; width: 18px; height: 1px; background: var(--hairline-strong); }
+
+    .search-title {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin: 2px 0 18px;
+      font-size: 21px; font-weight: 700; letter-spacing: .16em;
+      color: var(--accent-deep);
+    }
+    .search-title::before, .search-title::after {
+      content: ""; width: 26px; height: 1.5px; border-radius: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent));
+    }
+    .search-title::after { background: linear-gradient(90deg, var(--accent), transparent); }
+
+    /* ============ Search ============ */
+    .input-wrap { display: flex; gap: 12px; flex-direction: column; }
+
+    .input {
+      width: 100%; min-height: 58px; padding: 16px 22px;
+      font-family: inherit; font-size: 21px; letter-spacing: 0.06em;
+      color: var(--text); background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--hairline); border-radius: var(--radius-md);
+      outline: none; box-shadow: var(--shadow-input);
+      transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+    }
+    .input::placeholder { color: var(--text-mute); font-weight: 300; letter-spacing: 0.12em; }
+    .input:focus-visible {
+      background: #fff; border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-ghost), var(--shadow-input);
+    }
+
+    .btn {
+      position: relative; overflow: hidden;
+      width: 100%; min-height: 58px; padding: 16px 24px;
+      font-family: inherit; font-size: 18px; font-weight: 700; letter-spacing: 0.16em;
+      color: #fff; background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+      border: none; border-radius: var(--radius-md); cursor: pointer;
+      box-shadow: 0 8px 24px rgba(151, 122, 37, 0.18);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    /* 柔和光澤滑過 */
+    .btn::after {
+      content: ""; position: absolute; top: 0; left: -60%;
+      width: 42%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.42), transparent);
+      transform: skewX(-20deg);
+      animation: btnShine 5s ease-in-out infinite;
+    }
+    @keyframes btnShine {
+      0% { left: -60%; } 55% { left: 130%; } 100% { left: 130%; }
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .btn-ghost {
+      margin-top: 12px; background: transparent; color: var(--text-soft);
+      border: 1px solid var(--hairline-strong); box-shadow: none;
+      font-size: 15px; letter-spacing: 0.2em; padding: 13px 24px; min-height: 52px;
+    }
+    .btn-ghost::after { display: none; }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.6); color: var(--text); transform: none; }
+
+    .hint {
+      margin-top: 18px; font-size: 15px; line-height: 1.8;
+      color: var(--text-mute); text-align: center; letter-spacing: 0.05em;
+    }
+
+    .loading {
+      display: none; margin-top: 18px; text-align: center;
+      font-size: 14px; letter-spacing: 0.2em; color: var(--text-soft);
+    }
+    .loading.is-show { display: block; }
+    .loading .spinner {
+      display: inline-block; width: 14px; height: 14px; margin-right: 10px;
+      border: 1.5px solid var(--hairline-strong); border-top-color: var(--accent-deep);
+      border-radius: 50%; vertical-align: -2px; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      display: none; margin-top: 18px; padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(196, 130, 130, 0.08);
+      border: 1px solid rgba(196, 130, 130, 0.22);
+      color: #8a4d4d; text-align: center; font-size: 16px; font-weight: 500;
+    }
+    .error.is-show { display: block; }
+
+    /* ============ 首頁行程摺疊區 ============ */
+    .acc-card { padding: 0; overflow: hidden; }
+
+    .acc-btn {
+      display: flex; align-items: center; gap: 14px;
+      width: 100%; min-height: 68px;
+      padding: 16px 22px;
+      font-family: inherit; text-align: left;
+      background: transparent; border: none; cursor: pointer;
+      color: var(--text);
+      transition: background .25s var(--ease);
+    }
+    .acc-btn:hover { background: rgba(201, 169, 78, .08); }
+
+    .acc-ic {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+      color: #fff;
+    }
+    .acc-ic svg { width: 22px; height: 22px; display: block; }
+
+    .acc-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .acc-title { font-size: 19px; font-weight: 700; letter-spacing: .12em; color: var(--accent-deep); }
+    .acc-sub   { font-size: 13px; color: var(--text-mute); letter-spacing: .06em; }
+
+    .acc-arrow {
+      flex-shrink: 0; font-size: 20px; color: var(--accent-deep);
+      transition: transform .3s var(--ease);
+    }
+    .acc-btn[aria-expanded="true"] .acc-arrow { transform: rotate(180deg); }
+
+    .acc-panel { padding: 0 18px 20px; }
+    .acc-panel[hidden] { display: none; }
+
+    .iti-group-title {
+      margin: 6px 0 10px;
+      font-size: 15px; font-weight: 700; letter-spacing: .1em;
+      color: var(--accent-deep);
+    }
+
+    /* ============ Result ============ */
+    .result { display: none; margin-top: 32px; }
+    .result.is-show { display: block; }
+
+    /* 卡片依序淡入 */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result.is-show .anim { opacity: 0; animation: cardIn .5s var(--ease) forwards; }
+    .result.is-show .anim:nth-child(1) { animation-delay: .02s; }
+    .result.is-show .anim:nth-child(2) { animation-delay: .10s; }
+    .result.is-show .anim:nth-child(3) { animation-delay: .18s; }
+    .result.is-show .anim:nth-child(4) { animation-delay: .26s; }
+    .result.is-show .anim:nth-child(5) { animation-delay: .34s; }
+    .result.is-show .anim:nth-child(6) { animation-delay: .42s; }
+    .result.is-show .anim:nth-child(7) { animation-delay: .50s; }
+    .result.is-show .anim:nth-child(8) { animation-delay: .58s; }
+    .result.is-show .anim:nth-child(n+9) { animation-delay: .64s; }
+
+    /* 繳費狀態標籤 */
+    .pay-wrap { text-align: center; }
+    .pay {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 26px; border-radius: 999px;
+      font-size: 21px; font-weight: 700; letter-spacing: .1em;
+    }
+    .pay-ok   { background: rgba(20,155,145,.12);  color: #0B6E67; border: 2px solid rgba(20,155,145,.38); }
+    .pay-part { background: rgba(201,169,78,.16);  color: #8A6510; border: 2px solid rgba(201,169,78,.45); }
+    .pay-none { background: rgba(196,90,110,.10);  color: #A8425C; border: 2px solid rgba(196,90,110,.38); }
+    .pay-free { background: rgba(120,110,150,.10); color: #5F5480; border: 2px solid rgba(120,110,150,.32); }
+
+    /* 注意事項 */
+    .notice-item { position: relative; padding-left: 24px; margin-bottom: 8px; line-height: 1.8; }
+    .notice-item:last-child { margin-bottom: 0; }
+    .notice-item::before {
+      content: ""; position: absolute; left: 5px; top: 12px;
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    }
+
+    /* 團別主題（依團別在「總表」的順序自動套用） */
+    .result[data-theme="0"] { --accent: #c9a94e; --accent-deep: #977a25; --accent-ghost: rgba(201,169,78,.16); }
+    .result[data-theme="1"] { --accent: #7fa8ae; --accent-deep: #4f7b82; --accent-ghost: rgba(127,168,174,.16); }
+    .result[data-theme="2"] { --accent: #d09a7e; --accent-deep: #a06a4d; --accent-ghost: rgba(208,154,126,.16); }
+    .result[data-theme="3"] { --accent: #9fb98d; --accent-deep: #6b8a58; --accent-ghost: rgba(159,185,141,.16); }
+    .result[data-theme="4"] { --accent: #b5a5bf; --accent-deep: #816f8d; --accent-ghost: rgba(181,165,191,.16); }
+
+    .result-header {
+      padding: 36px 32px 28px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: linear-gradient(180deg, #ffffff 0%, var(--surface-soft) 100%);
+      border: 1px solid var(--hairline);
+      box-shadow: 0 18px 50px rgba(60, 50, 45, 0.06);
+      text-align: center; position: relative;
+    }
+    .result-header::before {
+      content: ""; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%); width: 48px; height: 3px;
+      background: var(--accent); border-radius: 0 0 999px 999px;
+    }
+
+    .result-name {
+      margin: 0;
+      font-family: "Noto Sans TC", "Inter", sans-serif;
+      font-size: clamp(28px, 5vw, 36px);
+      font-weight: 300; letter-spacing: 0.12em;
+    }
+    .result-name .greet {
+      color: var(--text-mute); font-size: .6em; letter-spacing: 0.3em; margin-left: 12px;
+    }
+    .result-name .kid-badge {
+      display: inline-block; font-size: 14px; font-weight: 600;
+      padding: 3px 12px; border-radius: 999px;
+      background: #FFE7B5; color: #8A5A0D; letter-spacing: .2em;
+      margin-left: 14px; vertical-align: middle;
+    }
+
+    .result-group {
+      display: inline-block; margin-top: 10px; padding: 5px 16px;
+      border-radius: 999px; background: var(--accent); color: #fff;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.3em;
+    }
+
+    .info-area {
+      padding: 28px 24px;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--hairline); border-top: none;
+      box-shadow: 0 18px 50px rgba(60, 50, 45, 0.06);
+    }
+
+    .simple-summary {
+      margin-bottom: 14px; padding: 10px 22px; border-radius: 999px;
+      background: var(--accent); color: #fff;
+      font-size: 16px; font-weight: 500; letter-spacing: .14em; text-align: center;
+    }
+    .simple-summary[hidden] { display: none; }
+
+    .info-card {
+      margin-bottom: 14px; padding: 20px 22px;
+      border-radius: var(--radius-md); background: #fff;
+      border: 1px solid var(--hairline);
+      box-shadow: 0 2px 8px rgba(40, 30, 24, 0.04);
+    }
+    .info-card[hidden] { display: none; }
+    .info-card-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 12px; font-weight: 500; letter-spacing: .32em;
+      text-transform: uppercase; color: var(--accent-deep); margin-bottom: 14px;
+    }
+    .info-card-title .ti-mark { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .info-content.text-block { font-size: 17px; line-height: 1.8; color: var(--text); }
+
+    /* ============ 橫式登機證 ============ */
+    .boarding-pass {
+      position: relative; display: grid; grid-template-columns: 1fr 220px;
+      margin-bottom: 14px; border-radius: var(--radius-md);
+      background: #fff; border: 1px solid var(--hairline);
+      box-shadow: 0 2px 12px rgba(40, 30, 24, 0.06); overflow: hidden;
+      transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+    }
+    .boarding-pass:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(40,30,24,.14); }
+    .boarding-pass[hidden] { display: none; }
+
+    .bp-main { position: relative; overflow: hidden; }
+    .bp-bg-plane {
+      position: absolute; top: 50%; left: 38%; width: 78%; max-width: 340px;
+      transform: translate(-50%, -50%); opacity: .10; pointer-events: none;
+      z-index: 0; color: var(--accent-deep);
+    }
+    .bp-bg-plane svg { display: block; width: 100%; height: auto; }
+
+    .bp-header {
+      position: relative; z-index: 2;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 16px; background: var(--accent);
+      border-bottom: 1px solid rgba(255,255,255,.16);
+    }
+    .bp-airline {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 700; color: #fff; letter-spacing: .06em;
+    }
+    .bp-airline-icon svg { display: block; width: 15px; height: 15px; }
+    .bp-pass-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .28em;
+      text-transform: uppercase; color: rgba(255,255,255,.92);
+    }
+
+    .bp-route {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 8px; padding: 18px 18px 16px;
+    }
+    .bp-port { display: flex; flex-direction: column; min-width: 0; max-width: 100%; }
+    .bp-city-zh, .bp-city-en { max-width: 100%; overflow-wrap: anywhere; }
+    .bp-port.left { align-items: flex-start; text-align: left; }
+    .bp-port.right { align-items: flex-end; text-align: right; }
+    .bp-code { font-size: 50px; font-weight: 700; letter-spacing: .02em; line-height: 1; }
+    .bp-city-zh { font-size: 17px; font-weight: 500; letter-spacing: .08em; margin-top: 8px; }
+    .bp-city-en {
+      font-size: 12px; font-weight: 500; letter-spacing: .2em;
+      color: var(--text-mute); text-transform: uppercase; margin-top: 3px;
+    }
+
+    .bp-route-mid { display: flex; align-items: center; min-width: 72px; color: var(--accent-deep); }
+    .bp-route-mid svg { display: block; width: 22px; height: 22px; flex-shrink: 0; }
+    .bp-route-mid::before, .bp-route-mid::after {
+      content: ""; height: 1px; flex: 1; opacity: .5;
+      background: repeating-linear-gradient(90deg, var(--accent) 0, var(--accent) 3px, transparent 3px, transparent 6px);
+    }
+    .bp-route-mid::before { margin-right: 4px; }
+    .bp-route-mid::after { margin-left: 4px; }
+
+    .bp-info {
+      position: relative; z-index: 1; display: grid;
+      grid-template-columns: 1fr 1fr .82fr .82fr 1.3fr;
+      border-top: 1px solid var(--hairline);
+    }
+    .bp-info-cell { padding: 9px 8px 11px; border-right: 1px solid var(--hairline); min-width: 0; overflow: hidden; }
+    .bp-info-cell:last-child { border-right: none; }
+    .bp-info-label {
+      font-size: 10px; font-weight: 500; letter-spacing: .08em;
+      color: var(--text-mute); text-transform: uppercase; margin-bottom: 6px; line-height: 1.3;
+    }
+    .bp-info-value {
+      font-size: 17px; font-weight: 600; letter-spacing: .02em; line-height: 1.2;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .bp-stub {
+      position: relative; padding: 12px 14px; display: flex; flex-direction: column;
+      background: linear-gradient(180deg, var(--accent-ghost) 0%, rgba(255,255,255,0) 70%);
+      border-left: 1.5px dashed var(--hairline-strong);
+    }
+    .bp-stub::before, .bp-stub::after {
+      content: ""; position: absolute; left: -9px; width: 16px; height: 16px;
+      background: var(--bg-2); border-radius: 50%;
+      box-shadow: 0 0 0 1px var(--hairline-strong) inset; z-index: 3;
+    }
+    .bp-stub::before { top: -8px; }
+    .bp-stub::after { bottom: -8px; }
+
+    .bp-stub-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .3em;
+      color: var(--accent-deep); text-transform: uppercase; text-align: right;
+      padding-bottom: 7px; border-bottom: 1px solid var(--hairline);
+    }
+    .bp-stub-route { display: flex; align-items: baseline; gap: 6px; font-weight: 700; margin-top: 7px; }
+    .bp-stub-code { font-size: 30px; line-height: 1; }
+    .bp-stub-arrow { font-size: 18px; color: var(--accent); }
+    .bp-stub-city {
+      font-size: 12px; color: var(--text-mute); line-height: 1.4; margin-top: 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .bp-stub-cell { margin-top: 8px; }
+    .bp-stub-tiny {
+      font-size: 10px; letter-spacing: .22em; color: var(--text-mute);
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .bp-stub-value {
+      font-size: 16px; font-weight: 600; letter-spacing: .04em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .bp-stub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .bp-stub-barcode { margin-top: auto; padding-top: 10px; opacity: .78; }
+    .bp-stub-barcode svg { display: block; width: 100%; height: 24px; }
+
+    @media (max-width: 540px) {
+      .boarding-pass { grid-template-columns: 1fr; }
+      .bp-stub { display: none; }
+      .bp-info { grid-template-columns: 1fr 1fr; }
+      .bp-info-cell { padding: 11px 14px 13px; border-bottom: 1px solid var(--hairline); }
+      .bp-info-cell:nth-child(2n) { border-right: none; }
+      .bp-info-cell:nth-child(5) { grid-column: 1 / -1; border-right: none; border-bottom: none; }
+      .bp-info-value { font-size: 20px; }
+      .bp-code { font-size: 40px; }
+      .bp-city-zh { font-size: 15px; margin-top: 6px; }
+      .bp-city-en { font-size: 10px; letter-spacing: .08em; }
+      .bp-route { padding: 18px 14px 14px; gap: 4px; }
+      .bp-route-mid { min-width: 44px; }
+    }
+
+    /* ============ 票券式資訊卡（車次 / 住宿 / 說明會）============ */
+    .ticket-card {
+      position: relative; margin-bottom: 14px; border-radius: var(--radius-md);
+      background: #fff; border: 1px solid var(--hairline);
+      box-shadow: 0 2px 12px rgba(40, 30, 24, 0.06); overflow: hidden;
+      transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+    }
+    .ticket-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(40,30,24,.14); }
+    .ticket-card[hidden] { display: none; }
+
+    .ticket-header {
+      display: flex; justify-content: space-between; align-items: center; gap: 14px;
+      padding: 7px 18px; background: var(--accent);
+      border-bottom: 1px dashed rgba(255,255,255,.28);
+    }
+    .th-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .th-icon { color: #fff; display: inline-flex; align-items: center; flex-shrink: 0; }
+    .th-icon svg { display: block; }
+    .th-label {
+      font-size: 13px; font-weight: 600; letter-spacing: .3em;
+      text-transform: uppercase; color: #fff;
+    }
+
+    .bus-body { padding: 14px 22px 16px; }
+    .bus-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+    .bus-row[hidden] { display: none; }
+    .bus-row.three-col { grid-template-columns: 1.4fr 1fr 1fr; }
+    .bus-row.second { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--hairline); }
+    .bus-cell { min-width: 0; }
+    .bus-label {
+      font-size: 11px; font-weight: 500; letter-spacing: .26em;
+      color: var(--text-mute); text-transform: uppercase; margin-bottom: 5px;
+    }
+    .bus-value { font-size: 20px; font-weight: 500; letter-spacing: .06em; line-height: 1.4; word-break: break-word; }
+    .bus-value.big { font-size: 24px; font-weight: 600; color: var(--accent-deep); }
+    .hotel-en { font-size: 13px; font-weight: 400; color: var(--text-mute); letter-spacing: .06em; margin-top: 3px; }
+
+    @media (max-width: 480px) {
+      .bus-row { grid-template-columns: 1fr; gap: 12px; }
+      .bus-row.three-col { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .bus-row.three-col .bus-cell:nth-child(1) { grid-column: 1 / -1; }
+      .bus-value { font-size: 21px; }
+    }
+
+    /* ============ 按鈕 / 名單 / 行程 ============ */
+    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+    .team-btn {
+      width: 100%; padding: 16px; font-family: inherit;
+      font-size: 16px; font-weight: 500; letter-spacing: .24em;
+      color: var(--accent-deep); background: transparent;
+      border: 1px solid var(--accent); border-radius: var(--radius-md);
+      cursor: pointer; transition: background .25s var(--ease);
+    }
+    .team-btn:hover { background: var(--accent-ghost); }
+
+    .team-list, .itinerary-panel { display: none; margin-top: 14px; }
+    .team-list.is-show, .itinerary-panel.is-show { display: block; }
+
+    .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+    .team-card {
+      padding: 14px 8px; border-radius: var(--radius-md); background: #fff;
+      border: 1px solid var(--hairline); text-align: center;
+      font-size: 19px; font-weight: 500; letter-spacing: .06em;
+    }
+    .team-card.is-me { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .empty-team {
+      padding: 24px; text-align: center; color: var(--text-mute);
+      font-size: 15px; letter-spacing: .15em;
+      background: rgba(255,255,255,.4); border-radius: var(--radius-md);
+      border: 1px dashed var(--hairline-strong);
+    }
+
+    .itinerary-content {
+      padding: 22px 24px; border-radius: var(--radius-md); background: #fff;
+      border: 1px solid var(--hairline); font-size: 17px; line-height: 1.85;
+      letter-spacing: .04em; white-space: pre-wrap; word-break: break-word;
+    }
+    .itinerary-content.is-empty::before {
+      content: "（尚未設定本團行程，請至『團別行程』工作表填寫）";
+      color: var(--text-mute); font-style: italic;
+    }
+    .iti-day {
+      display: block; font-size: 18px; font-weight: 700;
+      color: var(--accent-deep); letter-spacing: .08em;
+      padding: 8px 14px; margin: 14px 0 8px;
+      background: var(--accent-ghost); border-left: 3px solid var(--accent); border-radius: 6px;
+    }
+    .iti-day:first-child { margin-top: 0; }
+
+    .footer {
+      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--hairline);
+      text-align: center; color: var(--text-mute);
+      font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+    }
+
+    @media (min-width: 720px) {
+      .input-wrap { flex-direction: row; }
+      .input { flex: 1.4; }
+      .input-wrap .btn { flex: 1; }
+    }
+
+    @media (max-width: 480px) {
+      .page { padding: 32px 16px 60px; }
+      .card { padding: 24px 20px; }
+      .result-header { padding: 30px 22px 22px; }
+      .info-area { padding: 22px 18px; }
+      .main-title { letter-spacing: .12em; }
+      .action-row { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .loading .spinner { animation: none; }
+      .btn, .team-btn, .input { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <header class="hero">
+      <div class="event-name" id="eventName">2026 皇家團隊海外獎勵旅遊</div>
+      <h1 class="main-title" id="mainTitle"><span class="accent">泰精彩</span>之旅</h1>
+      <div class="en-title" id="enTitle">ROYAL TEAM・THAILAND REWARD TRIP</div>
+      <p class="sub-title" id="subTitle">泰精彩 5+1 日・個人行程查詢</p>
+      <div class="trip-date" id="tripDate">2026.12.19 － 12.24</div>
+      <p class="slogan" id="slogan">這一次，讓努力兌現成一場<span class="hl">泰精彩</span>！</p>
+
+      <svg class="skyline" viewBox="0 0 800 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- 熱帶太陽（緩慢閃耀） -->
+        <g id="sunRays" stroke-width="1.1" opacity=".65">
+          <line x1="734" y1="14" x2="734" y2="24" />
+          <line x1="706" y1="26" x2="712" y2="34" />
+          <line x1="762" y1="26" x2="756" y2="34" />
+          <line x1="696" y1="52" x2="706" y2="54" />
+          <line x1="772" y1="52" x2="762" y2="54" />
+        </g>
+        <circle id="sunCore" cx="734" cy="52" r="20" class="glow" />
+        <circle cx="734" cy="52" r="20" stroke-width="1.1" fill="none" opacity=".55" />
+
+        <!-- 棕櫚樹 -->
+        <g stroke-width="1.3">
+          <path d="M60 120 Q64 92 66 72" />
+          <g class="palm-leaves">
+          <path d="M66 72 Q50 62 38 68" />
+          <path d="M66 72 Q54 56 42 54" />
+          <path d="M66 72 Q78 56 92 56" />
+          <path d="M66 72 Q84 62 96 70" />
+          </g>
+          <circle cx="66" cy="70" r="2.5" class="glow" />
+        </g>
+
+        <!-- 鄭王廟 Wat Arun 主塔 -->
+        <g stroke-width="1.4">
+          <path d="M150 120 L158 66 L166 52 L170 34 L174 52 L182 66 L190 120 Z" />
+          <line x1="170" y1="34" x2="170" y2="22" />
+          <path d="M166 22 L170 12 L174 22 Z" />
+          <line x1="157" y1="78" x2="183" y2="78" />
+          <line x1="154" y1="94" x2="186" y2="94" />
+          <!-- 副塔 -->
+          <path d="M124 120 L130 88 L136 76 L142 88 L148 120 Z" />
+          <path d="M192 120 L198 88 L204 76 L210 88 L216 120 Z" />
+        </g>
+
+        <!-- 大皇宮／玉佛寺 三重簷 -->
+        <g stroke-width="1.4">
+          <path d="M258 120 L258 96 L300 96 L300 120" />
+          <path d="M250 96 Q279 74 308 96" />
+          <path d="M256 78 Q279 60 302 78" />
+          <path d="M262 62 Q279 48 296 62" />
+          <line x1="279" y1="48" x2="279" y2="38" />
+          <path d="M275 38 L279 30 L283 38 Z" />
+        </g>
+
+        <!-- 佛塔群 Chedi -->
+        <g stroke-width="1.3">
+          <path d="M350 120 Q356 90 362 74 Q368 90 374 120 Z" />
+          <line x1="362" y1="74" x2="362" y2="60" />
+          <path d="M386 120 Q392 96 398 84 Q404 96 410 120 Z" />
+          <line x1="398" y1="84" x2="398" y2="72" />
+        </g>
+
+        <!-- 現代曼谷天際線 -->
+        <g stroke-width="1.3">
+          <rect x="440" y="70" width="26" height="50" />
+          <line x1="440" y1="84" x2="466" y2="84" />
+          <line x1="440" y1="98" x2="466" y2="98" />
+          <path d="M478 120 L478 54 L492 44 L506 54 L506 120 Z" />
+          <line x1="478" y1="70" x2="506" y2="70" />
+          <line x1="478" y1="88" x2="506" y2="88" />
+          <rect x="518" y="82" width="20" height="38" />
+          <path d="M550 120 L550 62 L562 50 L574 62 L574 120 Z" />
+          <line x1="550" y1="80" x2="574" y2="80" />
+          <rect x="586" y="90" width="18" height="30" />
+        </g>
+
+        <!-- 長尾船 -->
+        <g id="boat" stroke-width="1.2">
+          <path d="M648 112 Q672 122 706 112 L700 118 L654 118 Z" />
+          <line x1="648" y1="112" x2="638" y2="102" />
+          <line x1="706" y1="112" x2="716" y2="104" />
+          <line x1="676" y1="112" x2="676" y2="92" />
+          <path d="M676 94 L690 108 L676 108 Z" />
+        </g>
+
+        <!-- 遠景 -->
+        <g stroke-width="1" opacity="0.55">
+          <rect x="736" y="100" width="10" height="20" />
+          <rect x="750" y="94" width="8" height="26" />
+          <rect x="762" y="98" width="12" height="22" />
+          <rect x="778" y="92" width="8" height="28" />
+        </g>
+
+        <path class="sea" d="M0 126 Q40 122 80 126 T160 126 T240 126 T320 126 T400 126 T480 126 T560 126 T640 126 T720 126 T800 126" />
+        <path class="sea" d="M0 134 Q50 130 100 134 T200 134 T300 134 T400 134 T500 134 T600 134 T700 134 T800 134" opacity="0.4" />
+      </svg>
+    </header>
+
+    <section class="card" aria-labelledby="searchTitle">
+      <h2 class="search-title" id="searchTitle">旅人專屬查詢</h2>
+
+      <form id="searchForm" novalidate>
+        <label class="visually-hidden" for="nameInput">姓名</label>
+        <div class="input-wrap">
+          <input id="nameInput" name="name" type="text" class="input"
+                 autocapitalize="off" autocomplete="off" enterkeyhint="search"
+                 placeholder="請輸入報名時登記的中文姓名" aria-describedby="searchHint" />
+          <button id="searchBtn" class="btn" type="submit">開啟我的泰精彩旅程</button>
+        </div>
+        <button id="resetBtn" class="btn btn-ghost" type="button" hidden>重新查詢</button>
+      </form>
+
+      <div class="hint" id="searchHint">
+        請輸入報名時登記的中文姓名<br>
+        將顯示個人航班、車次、房間與本車名單
+      </div>
+
+      <div id="loading" class="loading" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>查詢中
+      </div>
+      <div id="error" class="error" role="alert" aria-live="assertive"></div>
+    </section>
+
+    <!-- 本次行程（預設收起，點一下展開） -->
+    <section class="card acc-card" id="homeItiCard">
+      <button class="acc-btn" type="button" id="homeItiBtn" aria-expanded="false" aria-controls="homeItiPanel">
+        <span class="acc-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+        </span>
+        <span class="acc-text">
+          <span class="acc-title">本次行程</span>
+          <span class="acc-sub">泰精彩 5+1 日・完整每日行程</span>
+        </span>
+        <span class="acc-arrow" aria-hidden="true">▾</span>
+      </button>
+      <div class="acc-panel" id="homeItiPanel" hidden>
+        <div class="itinerary-content" id="homeItiContent">行程載入中…</div>
+      </div>
+    </section>
+
+    <section id="result" class="result" aria-live="polite">
+      <div class="result-header anim">
+        <h2 class="result-name" id="resultName"><span id="resultNameText">—</span><span class="greet">您好</span></h2>
+        <div class="result-group" id="resultGroup">—</div>
+      </div>
+
+      <div class="info-area">
+
+        <div class="simple-summary anim" id="tripInfo">—</div>
+
+        <!-- 行前說明 -->
+        <div class="ticket-card anim" id="card-briefing">
+          <div class="ticket-header">
+            <div class="th-left">
+              <span class="th-icon" aria-hidden="true">
+                <svg width="22" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+              </span>
+              <span class="th-label">BRIEFING · 行前說明</span>
+            </div>
+          </div>
+          <div class="bus-body">
+            <div class="bus-row">
+              <div class="bus-cell">
+                <div class="bus-label">BRIEFING · 說明會時間</div>
+                <div class="bus-value" id="briefingTime">—</div>
+              </div>
+              <div class="bus-cell">
+                <div class="bus-label">VENUE · 說明會地點</div>
+                <div class="bus-value" id="briefingPlace">—</div>
+              </div>
+            </div>
+            <div class="bus-row second">
+              <div class="bus-cell">
+                <div class="bus-label">DAY 1 · 集合時間</div>
+                <div class="bus-value big" id="dayOneMeetTime">—</div>
+              </div>
+              <div class="bus-cell">
+                <div class="bus-label">COUNTER · 集合地點</div>
+                <div class="bus-value" id="dayOneMeetCounter">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 去程 -->
+        <div class="boarding-pass anim" id="card-go">
+          <div class="bp-main">
+            <div class="bp-bg-plane" aria-hidden="true">
+              <svg viewBox="0 0 200 80" fill="currentColor"><path d="M188 40c0-2-3-3-6-3l-30 1-38-26c-2-1-5-1-7 0l-5 3 22 23-29 1-12-9c-1-1-3-1-4 0l-4 2 9 11-21 1c-2 0-3 1-3 3 0 2 1 3 3 3l21 1-9 11 4 2c1 1 3 1 4 0l12-9 29 1-22 23 5 3c2 1 5 1 7 0l38-26 30 1c3 0 6-1 6-3z"/></svg>
+            </div>
+            <div class="bp-header">
+              <div class="bp-airline">
+                <span class="bp-airline-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                </span>
+                <span id="goAirlineName">—</span>
+              </div>
+              <div class="bp-pass-label">DEPARTURE · 去程</div>
+            </div>
+            <div class="bp-route">
+              <div class="bp-port left">
+                <div class="bp-code" id="goFromCode">—</div>
+                <div class="bp-city-zh" id="goFromNameZh">—</div>
+                <div class="bp-city-en" id="goFromNameEn">—</div>
+              </div>
+              <div class="bp-route-mid" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              </div>
+              <div class="bp-port right">
+                <div class="bp-code" id="goToCode">—</div>
+                <div class="bp-city-zh" id="goToNameZh">—</div>
+                <div class="bp-city-en" id="goToNameEn">—</div>
+              </div>
+            </div>
+            <div class="bp-info">
+              <div class="bp-info-cell">
+                <div class="bp-info-label">PASSENGER<br>乘客</div>
+                <div class="bp-info-value" id="goPassenger">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">FLIGHT<br>航班</div>
+                <div class="bp-info-value" id="goFlight">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">DEPART<br>起飛</div>
+                <div class="bp-info-value" id="goFromTime">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">ARRIVE<br>抵達</div>
+                <div class="bp-info-value" id="goToTime">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">DATE<br>日期</div>
+                <div class="bp-info-value" id="goDate">—</div>
+              </div>
+            </div>
+          </div>
+          <div class="bp-stub">
+            <div class="bp-stub-label">BOARDING PASS</div>
+            <div class="bp-stub-route">
+              <span class="bp-stub-code" id="goFromCodeStub">—</span>
+              <span class="bp-stub-arrow">→</span>
+              <span class="bp-stub-code" id="goToCodeStub">—</span>
+            </div>
+            <div class="bp-stub-city" id="goCityStub">—</div>
+            <div class="bp-stub-cell">
+              <div class="bp-stub-tiny">PASSENGER · 乘客</div>
+              <div class="bp-stub-value" id="goPassengerStub">—</div>
+            </div>
+            <div class="bp-stub-grid">
+              <div>
+                <div class="bp-stub-tiny">FLIGHT</div>
+                <div class="bp-stub-value" id="goFlightStub">—</div>
+              </div>
+              <div>
+                <div class="bp-stub-tiny">DATE</div>
+                <div class="bp-stub-value" id="goDateStub">—</div>
+              </div>
+            </div>
+            <div class="bp-stub-barcode" aria-hidden="true">
+              <svg viewBox="0 0 160 24" preserveAspectRatio="none"><g fill="currentColor">
+                <rect x="0" y="0" width="2" height="24"/><rect x="4" y="0" width="1" height="24"/>
+                <rect x="7" y="0" width="3" height="24"/><rect x="12" y="0" width="1" height="24"/>
+                <rect x="15" y="0" width="2.5" height="24"/><rect x="20" y="0" width="1" height="24"/>
+                <rect x="23" y="0" width="4" height="24"/><rect x="29" y="0" width="1" height="24"/>
+                <rect x="32" y="0" width="2" height="24"/><rect x="37" y="0" width="3" height="24"/>
+                <rect x="42" y="0" width="1" height="24"/><rect x="45" y="0" width="2" height="24"/>
+                <rect x="49" y="0" width="1" height="24"/><rect x="52" y="0" width="3" height="24"/>
+                <rect x="57" y="0" width="2" height="24"/><rect x="61" y="0" width="1" height="24"/>
+                <rect x="64" y="0" width="4" height="24"/><rect x="70" y="0" width="1" height="24"/>
+                <rect x="73" y="0" width="2.5" height="24"/><rect x="78" y="0" width="1" height="24"/>
+                <rect x="81" y="0" width="3" height="24"/><rect x="86" y="0" width="2" height="24"/>
+                <rect x="90" y="0" width="1" height="24"/><rect x="93" y="0" width="2" height="24"/>
+                <rect x="97" y="0" width="3" height="24"/><rect x="102" y="0" width="1" height="24"/>
+                <rect x="105" y="0" width="4" height="24"/><rect x="111" y="0" width="1" height="24"/>
+                <rect x="114" y="0" width="2" height="24"/><rect x="118" y="0" width="3" height="24"/>
+                <rect x="123" y="0" width="1" height="24"/><rect x="126" y="0" width="2.5" height="24"/>
+                <rect x="131" y="0" width="1" height="24"/><rect x="134" y="0" width="3" height="24"/>
+                <rect x="139" y="0" width="1" height="24"/><rect x="142" y="0" width="2" height="24"/>
+                <rect x="146" y="0" width="4" height="24"/><rect x="152" y="0" width="1" height="24"/>
+                <rect x="155" y="0" width="3" height="24"/>
+              </g></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 回程 -->
+        <div class="boarding-pass anim" id="card-back">
+          <div class="bp-main">
+            <div class="bp-bg-plane" aria-hidden="true">
+              <svg viewBox="0 0 200 80" fill="currentColor"><path d="M188 40c0-2-3-3-6-3l-30 1-38-26c-2-1-5-1-7 0l-5 3 22 23-29 1-12-9c-1-1-3-1-4 0l-4 2 9 11-21 1c-2 0-3 1-3 3 0 2 1 3 3 3l21 1-9 11 4 2c1 1 3 1 4 0l12-9 29 1-22 23 5 3c2 1 5 1 7 0l38-26 30 1c3 0 6-1 6-3z"/></svg>
+            </div>
+            <div class="bp-header">
+              <div class="bp-airline">
+                <span class="bp-airline-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                </span>
+                <span id="backAirlineName">—</span>
+              </div>
+              <div class="bp-pass-label">RETURN · 回程</div>
+            </div>
+            <div class="bp-route">
+              <div class="bp-port left">
+                <div class="bp-code" id="backFromCode">—</div>
+                <div class="bp-city-zh" id="backFromNameZh">—</div>
+                <div class="bp-city-en" id="backFromNameEn">—</div>
+              </div>
+              <div class="bp-route-mid" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              </div>
+              <div class="bp-port right">
+                <div class="bp-code" id="backToCode">—</div>
+                <div class="bp-city-zh" id="backToNameZh">—</div>
+                <div class="bp-city-en" id="backToNameEn">—</div>
+              </div>
+            </div>
+            <div class="bp-info">
+              <div class="bp-info-cell">
+                <div class="bp-info-label">PASSENGER<br>乘客</div>
+                <div class="bp-info-value" id="backPassenger">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">FLIGHT<br>航班</div>
+                <div class="bp-info-value" id="backFlight">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">DEPART<br>起飛</div>
+                <div class="bp-info-value" id="backFromTime">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">ARRIVE<br>抵達</div>
+                <div class="bp-info-value" id="backToTime">—</div>
+              </div>
+              <div class="bp-info-cell">
+                <div class="bp-info-label">DATE<br>日期</div>
+                <div class="bp-info-value" id="backDate">—</div>
+              </div>
+            </div>
+          </div>
+          <div class="bp-stub">
+            <div class="bp-stub-label">BOARDING PASS</div>
+            <div class="bp-stub-route">
+              <span class="bp-stub-code" id="backFromCodeStub">—</span>
+              <span class="bp-stub-arrow">→</span>
+              <span class="bp-stub-code" id="backToCodeStub">—</span>
+            </div>
+            <div class="bp-stub-city" id="backCityStub">—</div>
+            <div class="bp-stub-cell">
+              <div class="bp-stub-tiny">PASSENGER · 乘客</div>
+              <div class="bp-stub-value" id="backPassengerStub">—</div>
+            </div>
+            <div class="bp-stub-grid">
+              <div>
+                <div class="bp-stub-tiny">FLIGHT</div>
+                <div class="bp-stub-value" id="backFlightStub">—</div>
+              </div>
+              <div>
+                <div class="bp-stub-tiny">DATE</div>
+                <div class="bp-stub-value" id="backDateStub">—</div>
+              </div>
+            </div>
+            <div class="bp-stub-barcode" aria-hidden="true">
+              <svg viewBox="0 0 160 24" preserveAspectRatio="none"><g fill="currentColor">
+                <rect x="0" y="0" width="2" height="24"/><rect x="4" y="0" width="1" height="24"/>
+                <rect x="7" y="0" width="3" height="24"/><rect x="12" y="0" width="1" height="24"/>
+                <rect x="15" y="0" width="2.5" height="24"/><rect x="20" y="0" width="1" height="24"/>
+                <rect x="23" y="0" width="4" height="24"/><rect x="29" y="0" width="1" height="24"/>
+                <rect x="32" y="0" width="2" height="24"/><rect x="37" y="0" width="3" height="24"/>
+                <rect x="42" y="0" width="1" height="24"/><rect x="45" y="0" width="2" height="24"/>
+                <rect x="49" y="0" width="1" height="24"/><rect x="52" y="0" width="3" height="24"/>
+                <rect x="57" y="0" width="2" height="24"/><rect x="61" y="0" width="1" height="24"/>
+                <rect x="64" y="0" width="4" height="24"/><rect x="70" y="0" width="1" height="24"/>
+                <rect x="73" y="0" width="2.5" height="24"/><rect x="78" y="0" width="1" height="24"/>
+                <rect x="81" y="0" width="3" height="24"/><rect x="86" y="0" width="2" height="24"/>
+                <rect x="90" y="0" width="1" height="24"/><rect x="93" y="0" width="2" height="24"/>
+                <rect x="97" y="0" width="3" height="24"/><rect x="102" y="0" width="1" height="24"/>
+                <rect x="105" y="0" width="4" height="24"/><rect x="111" y="0" width="1" height="24"/>
+                <rect x="114" y="0" width="2" height="24"/><rect x="118" y="0" width="3" height="24"/>
+                <rect x="123" y="0" width="1" height="24"/><rect x="126" y="0" width="2.5" height="24"/>
+                <rect x="131" y="0" width="1" height="24"/><rect x="134" y="0" width="3" height="24"/>
+                <rect x="139" y="0" width="1" height="24"/><rect x="142" y="0" width="2" height="24"/>
+                <rect x="146" y="0" width="4" height="24"/><rect x="152" y="0" width="1" height="24"/>
+                <rect x="155" y="0" width="3" height="24"/>
+              </g></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 車次 -->
+        <div class="ticket-card anim" id="card-bus">
+          <div class="ticket-header">
+            <div class="th-left">
+              <span class="th-icon" aria-hidden="true">
+                <svg width="26" height="16" viewBox="0 0 40 24" fill="currentColor"><rect x="2" y="3" width="33" height="13" rx="2"/><rect x="5" y="6" width="6" height="5" fill="#fff"/><rect x="13" y="6" width="6" height="5" fill="#fff"/><rect x="21" y="6" width="6" height="5" fill="#fff"/><rect x="29" y="6" width="4" height="5" fill="#fff"/><rect x="35" y="7" width="3" height="3" rx="1"/><circle cx="9" cy="18" r="2.5"/><circle cx="28" cy="18" r="2.5"/></svg>
+              </span>
+              <span class="th-label">BUS · 旅行車次</span>
+            </div>
+          </div>
+          <div class="bus-body">
+            <div class="bus-row">
+              <div class="bus-cell">
+                <div class="bus-label">TEAM · 團名車次</div>
+                <div class="bus-value big" id="busTeam">—</div>
+              </div>
+              <div class="bus-cell">
+                <div class="bus-label">CAPTAIN · 車長</div>
+                <div class="bus-value" id="busLeader">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 住宿 -->
+        <div class="ticket-card anim" id="card-room">
+          <div class="ticket-header">
+            <div class="th-left">
+              <span class="th-icon" aria-hidden="true">
+                <svg width="26" height="16" viewBox="0 0 28 18" fill="currentColor"><path d="M5 9c1.66 0 3-1.34 3-3S6.66 3 5 3 2 4.34 2 6s1.34 3 3 3zm12-7h-7v8H2V4H0v14h2v-3h24v3h2v-9c0-2.2-1.8-4-4-4z"/></svg>
+              </span>
+              <span class="th-label">STAY · 住宿</span>
+            </div>
+          </div>
+          <div class="bus-body">
+            <div class="bus-row">
+              <div class="bus-cell" style="grid-column: 1 / -1;">
+                <div class="bus-label">HOTEL · 飯店</div>
+                <div class="bus-value" id="hotel">—</div>
+              </div>
+            </div>
+            <div class="bus-row second three-col">
+              <div class="bus-cell">
+                <div class="bus-label">ROOM · 房號</div>
+                <div class="bus-value big" id="roomNo">—</div>
+              </div>
+              <div class="bus-cell">
+                <div class="bus-label">TYPE · 房型</div>
+                <div class="bus-value" id="roomType">—</div>
+              </div>
+              <div class="bus-cell">
+                <div class="bus-label">ROOMMATE · 同房</div>
+                <div class="bus-value" id="roomMate">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 加購行程 -->
+        <div class="info-card anim" id="card-extra">
+          <div class="info-card-title"><span class="ti-mark"></span>OPTIONAL · 加購行程</div>
+          <div class="info-content text-block" id="extra">—</div>
+        </div>
+
+        <!-- 繳費狀態 -->
+        <div class="info-card anim" id="card-payment">
+          <div class="info-card-title"><span class="ti-mark"></span>PAYMENT · 繳費狀態</div>
+          <div class="pay-wrap"><span class="pay pay-ok" id="payment">—</span></div>
+        </div>
+
+        <!-- 備註 -->
+        <div class="info-card anim" id="card-frontNote">
+          <div class="info-card-title"><span class="ti-mark"></span>NOTE · 個人備註</div>
+          <div class="info-content text-block" id="frontNote">—</div>
+        </div>
+
+        <!-- 注意事項 -->
+        <div class="info-card anim" id="card-notice">
+          <div class="info-card-title"><span class="ti-mark"></span>NOTICE · 注意事項</div>
+          <div class="info-content" id="notice"></div>
+        </div>
+
+        <div class="action-row">
+          <button class="team-btn" type="button" id="teamBtn" aria-expanded="false" aria-controls="teamList">查看本車名單</button>
+          <button class="team-btn" type="button" id="itineraryBtn" aria-expanded="false" aria-controls="itineraryPanel">本團行程</button>
+        </div>
+
+        <div id="teamList" class="team-list" hidden>
+          <div id="teamCards" class="team-cards"></div>
+        </div>
+
+        <div id="itineraryPanel" class="itinerary-panel" hidden>
+          <div class="itinerary-content" id="itineraryContent">—</div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="footer" id="pageFooter">行程資訊以主辦單位與領隊公告為準</div>
+
+  </main>
+
+  <script>
+  (function () {
+    /* ==========================================================
+     * ★★★ 唯一要改的地方 ★★★
+     * 把 Apps Script「部署為網頁應用程式」拿到的網址貼在這裡
+     * （形如 https://script.google.com/macros/s/AKfycb.../exec）
+     * ========================================================== */
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwm1I9pq50fyEYzkXrODIFNjXjrMQBjZofRXeA2_7ijqfMBAeAdDFPLnigLKFI2NBu3Mg/exec';
+
+    const $ = function (id) { return document.getElementById(id); };
+    const PLACEHOLDER = '—';
+
+    const els = {
+      form: $('searchForm'),
+      input: $('nameInput'),
+      searchBtn: $('searchBtn'),
+      resetBtn: $('resetBtn'),
+      loading: $('loading'),
+      error: $('error'),
+      result: $('result'),
+      teamBtn: $('teamBtn'),
+      teamList: $('teamList'),
+      teamCards: $('teamCards'),
+      itineraryBtn: $('itineraryBtn'),
+      itineraryPanel: $('itineraryPanel'),
+      itineraryContent: $('itineraryContent')
+    };
+
+    /* ---------- 機場代碼 ---------- */
+    const AIRPORT_INFO = {
+      '高雄小港機場':      { code: 'KHH', zh: '高雄小港機場',   en: 'KAOHSIUNG' },
+      '桃園國際機場':      { code: 'TPE', zh: '桃園國際機場',   en: 'TAOYUAN' },
+      '桃園機場':          { code: 'TPE', zh: '桃園國際機場',   en: 'TAOYUAN' },
+      '台北松山機場':      { code: 'TSA', zh: '松山機場',       en: 'TAIPEI' },
+      '台中機場':          { code: 'RMQ', zh: '台中國際機場',   en: 'TAICHUNG' },
+      '曼谷蘇凡納布機場':  { code: 'BKK', zh: '曼谷蘇凡納布',   en: 'BANGKOK SUVARNABHUMI' },
+      '蘇凡納布機場':      { code: 'BKK', zh: '曼谷蘇凡納布',   en: 'BANGKOK SUVARNABHUMI' },
+      '曼谷廊曼機場':      { code: 'DMK', zh: '曼谷廊曼機場',   en: 'BANGKOK DON MUEANG' },
+      '廊曼機場':          { code: 'DMK', zh: '曼谷廊曼機場',   en: 'BANGKOK DON MUEANG' },
+      '普吉國際機場':      { code: 'HKT', zh: '普吉機場',       en: 'PHUKET' },
+      '清邁國際機場':      { code: 'CNX', zh: '清邁機場',       en: 'CHIANG MAI' },
+      '喀比機場':          { code: 'KBV', zh: '喀比機場',       en: 'KRABI' }
+    };
+
+    function lookupAirport(name) {
+      if (!name) return { code: '—', zh: '—', en: '—' };
+      const t = String(name).trim();
+      if (AIRPORT_INFO[t]) return AIRPORT_INFO[t];
+      for (const key in AIRPORT_INFO) {
+        if (t.indexOf(key) >= 0) return AIRPORT_INFO[key];
+      }
+      return { code: '✈', zh: t, en: '' };
+    }
+
+    function parseAirportPair(s) {
+      if (!s) return { from: lookupAirport(''), to: lookupAirport('') };
+      const parts = String(s).split(/\s*[→\->]+\s*/);
+      return { from: lookupAirport(parts[0] || ''), to: lookupAirport(parts[1] || '') };
+    }
+
+    function parseTimePair(s) {
+      if (!s) return { depart: '', arrive: '' };
+      const str = String(s);
+      const dm = str.match(/起飛\s*([\d:]+)/);
+      const am = str.match(/抵達\s*([\d:]+)/);
+      if (dm || am) return { depart: dm ? dm[1] : '', arrive: am ? am[1] : '' };
+      // 沒寫「起飛/抵達」時，抓前兩個時間
+      const all = str.match(/\d{1,2}:\d{2}/g) || [];
+      return { depart: all[0] || '', arrive: all[1] || '' };
+    }
+
+    function formatTicketDate(s) {
+      if (!s) return '';
+      const m = String(s).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+      if (!m) return String(s);
+      const mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+      return m[1] + '/' + (mo < 10 ? '0' + mo : mo) + '/' + (d < 10 ? '0' + d : d);
+    }
+
+    const WEEKDAY_ZH = ['日', '一', '二', '三', '四', '五', '六'];
+    function formatTripDay(s) {
+      if (!s) return '';
+      const m = String(s).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+      if (!m) return '';
+      const y = parseInt(m[1], 10), mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+      return mo + '/' + d + '(' + WEEKDAY_ZH[new Date(y, mo - 1, d).getDay()] + ')';
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatItinerary(text) {
+      if (!text) return '';
+      return String(text).split(/\r?\n/).map(function (line) {
+        if (/^\s*DAY\s*\d/i.test(line)) {
+          return '<div class="iti-day">' + escapeHtml(line.trim()) + '</div>';
+        }
+        return escapeHtml(line);
+      }).join('\n');
+    }
+
+    function isEmpty(v) { return v === undefined || v === null || String(v).trim() === ''; }
+    function showEl(el) { el.classList.add('is-show'); }
+    function hideEl(el) { el.classList.remove('is-show'); }
+
+    function setError(msg) { els.error.textContent = msg; showEl(els.error); }
+    function clearError() { els.error.textContent = ''; hideEl(els.error); }
+
+    function setBusy(busy) {
+      els.searchBtn.disabled = busy;
+      if (busy) showEl(els.loading); else hideEl(els.loading);
+    }
+
+    /* ---------- JSONP ---------- */
+    let jsonpSeq = 0;
+    function jsonp(params, onSuccess, onError) {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('/exec') < 0 || APPS_SCRIPT_URL.indexOf('請貼上') >= 0) {
+        onError('尚未設定後端網址（APPS_SCRIPT_URL）');
+        return;
+      }
+      const cbName = '__thaiCb' + (++jsonpSeq) + '_' + Date.now();
+      const qs = Object.keys(params).map(function (k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      }).join('&');
+
+      const script = document.createElement('script');
+      let done = false;
+
+      const timer = setTimeout(function () {
+        if (done) return;
+        cleanup();
+        onError('連線逾時，請檢查網路或稍後再試');
+      }, 15000);
+
+      function cleanup() {
+        done = true;
+        clearTimeout(timer);
+        try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cbName] = function (res) {
+        if (done) return;
+        cleanup();
+        onSuccess(res);
+      };
+
+      script.src = APPS_SCRIPT_URL + '?' + qs + '&callback=' + cbName + '&_t=' + Date.now();
+      script.onerror = function () {
+        if (done) return;
+        cleanup();
+        onError('查詢服務連線失敗，請稍後再試');
+      };
+      document.head.appendChild(script);
+    }
+
+    /* ---------- 卡片渲染 ---------- */
+    function setBriefingCard(d) {
+      $('briefingTime').textContent      = d.briefingTime      || PLACEHOLDER;
+      $('briefingPlace').textContent     = d.briefingPlace     || PLACEHOLDER;
+      $('dayOneMeetTime').textContent    = d.dayOneMeetTime    || PLACEHOLDER;
+      $('dayOneMeetCounter').textContent = d.dayOneMeetCounter || PLACEHOLDER;
+      $('card-briefing').hidden = isEmpty(d.briefingTime) && isEmpty(d.briefingPlace) &&
+                                  isEmpty(d.dayOneMeetTime) && isEmpty(d.dayOneMeetCounter);
+    }
+
+    function setTicket(prefix, d) {
+      const card = $('card-' + prefix);
+      if (!card) return;
+
+      const ap = parseAirportPair(d[prefix + 'Airport']);
+      const tm = parseTimePair(d[prefix + 'Time']);
+      const flight = d[prefix + 'Flight'] || '';
+      const dateFmt = formatTicketDate(d[prefix + 'Date']);
+      const name = d.name || '';
+
+      $(prefix + 'AirlineName').textContent = d[prefix + 'Airline'] || PLACEHOLDER;
+      $(prefix + 'FromCode').textContent    = ap.from.code;
+      $(prefix + 'FromNameZh').textContent  = ap.from.zh;
+      $(prefix + 'FromNameEn').textContent  = ap.from.en;
+      $(prefix + 'ToCode').textContent      = ap.to.code;
+      $(prefix + 'ToNameZh').textContent    = ap.to.zh;
+      $(prefix + 'ToNameEn').textContent    = ap.to.en;
+
+      $(prefix + 'Passenger').textContent = name || PLACEHOLDER;
+      $(prefix + 'Flight').textContent    = flight || PLACEHOLDER;
+      $(prefix + 'FromTime').textContent  = tm.depart || PLACEHOLDER;
+      $(prefix + 'ToTime').textContent    = tm.arrive || PLACEHOLDER;
+      $(prefix + 'Date').textContent      = dateFmt || PLACEHOLDER;
+
+      function shortName(n) { return String(n || '').replace(/(國際)?機場/g, '').trim(); }
+      $(prefix + 'FromCodeStub').textContent  = ap.from.code;
+      $(prefix + 'ToCodeStub').textContent    = ap.to.code;
+      $(prefix + 'CityStub').textContent      = shortName(ap.from.zh) + ' → ' + shortName(ap.to.zh);
+      $(prefix + 'PassengerStub').textContent = name || PLACEHOLDER;
+      $(prefix + 'FlightStub').textContent    = flight || PLACEHOLDER;
+      $(prefix + 'DateStub').textContent      = dateFmt || PLACEHOLDER;
+
+      card.hidden = isEmpty(d[prefix + 'Airport']) && isEmpty(d[prefix + 'Flight']) && isEmpty(d[prefix + 'Date']);
+    }
+
+    function setBusCard(d) {
+      const team = [d.group, d.busNo].filter(function (v) { return !isEmpty(v); }).join('　');
+      $('busTeam').textContent   = team || PLACEHOLDER;
+      $('busLeader').textContent = d.leader || PLACEHOLDER;
+      $('card-bus').hidden = isEmpty(d.group) && isEmpty(d.busNo) && isEmpty(d.leader);
+    }
+
+    function setRoomCard(d) {
+      const hotelEl = $('hotel');
+      const hotelStr = (d.hotel || '').trim();
+      if (hotelStr.indexOf('/') >= 0) {
+        const parts = hotelStr.split('/').map(function (s) { return s.trim(); });
+        hotelEl.innerHTML = '<div>' + escapeHtml(parts[0]) + '</div>' +
+                            '<div class="hotel-en">' + escapeHtml(parts.slice(1).join(' / ')) + '</div>';
+      } else {
+        hotelEl.textContent = hotelStr || PLACEHOLDER;
+      }
+      $('roomNo').textContent   = d.room || PLACEHOLDER;
+      $('roomType').textContent = d.roomType || PLACEHOLDER;
+      $('roomMate').textContent = d.roomMate || PLACEHOLDER;
+      $('card-room').hidden = isEmpty(d.hotel) && isEmpty(d.room) && isEmpty(d.roomMate);
+    }
+
+    function setTextOrHide(cardId, valueId, val) {
+      const card = $(cardId), node = $(valueId);
+      if (!card || !node) return;
+      if (isEmpty(val) || String(val).trim() === '無') {
+        node.textContent = PLACEHOLDER;
+        card.hidden = true;
+      } else {
+        node.textContent = String(val);
+        card.hidden = false;
+      }
+    }
+
+    function isKid(note) { return note ? /兒童|小朋友/.test(String(note)) : false; }
+
+    function setPayment(pay) {
+      const chip = $('payment');
+      const text = isEmpty(pay) ? '尚未登錄' : String(pay).trim();
+      chip.textContent = text;
+      chip.className = 'pay ' + (
+        text === '已繳清'   ? 'pay-ok'   :
+        text === '已繳訂金' ? 'pay-part' :
+        text === '未繳款'   ? 'pay-none' :
+        text === '免收'     ? 'pay-free' : 'pay-part'
+      );
+      $('card-payment').hidden = false;
+    }
+
+    function setNotice(text) {
+      const card = $('card-notice');
+      if (isEmpty(text)) { card.hidden = true; return; }
+      card.hidden = false;
+      $('notice').innerHTML = String(text).split(/\r?\n/)
+        .filter(function (l) { return l.trim() !== ''; })
+        .map(function (l) { return '<div class="notice-item">' + escapeHtml(l.trim()) + '</div>'; })
+        .join('');
+    }
+
+    function renderTeamList(teamList, myName) {
+      els.teamCards.innerHTML = '';
+      if (!teamList || teamList.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-team';
+        empty.textContent = '目前沒有本車名單資料';
+        els.teamCards.appendChild(empty);
+        return;
+      }
+      const frag = document.createDocumentFragment();
+      teamList.forEach(function (item) {
+        const card = document.createElement('div');
+        card.className = 'team-card' + (item.name === myName ? ' is-me' : '');
+        card.textContent = item.name || PLACEHOLDER;
+        frag.appendChild(card);
+      });
+      els.teamCards.appendChild(frag);
+    }
+
+    function showResult(d) {
+      $('resultNameText').textContent = d.name || PLACEHOLDER;
+      $('resultGroup').textContent = d.group || PLACEHOLDER;
+
+      const nameH2 = $('resultName');
+      const oldKid = nameH2.querySelector('.kid-badge');
+      if (oldKid) oldKid.remove();
+      if (isKid(d.note)) {
+        const badge = document.createElement('span');
+        badge.className = 'kid-badge';
+        badge.textContent = '兒童';
+        nameH2.appendChild(badge);
+      }
+
+      const idx = (typeof d.groupIndex === 'number' && d.groupIndex >= 0) ? d.groupIndex : 0;
+      els.result.setAttribute('data-theme', String(idx % 5));
+
+      const parts = [];
+      const day = formatTripDay(d.goDate);
+      if (day) parts.push(day);
+      if (!isEmpty(d.group)) parts.push(d.group);
+      if (!isEmpty(d.busNo)) parts.push(d.busNo);
+      const tripInfoEl = $('tripInfo');
+      if (parts.length === 0) {
+        tripInfoEl.hidden = true;
+      } else {
+        tripInfoEl.textContent = parts.join('　·　');
+        tripInfoEl.hidden = false;
+      }
+
+      setBriefingCard(d);
+      setTicket('go', d);
+      setTicket('back', d);
+      setBusCard(d);
+      setRoomCard(d);
+      setTextOrHide('card-extra', 'extra', d.extra);
+      setPayment(d.payment);
+      setTextOrHide('card-frontNote', 'frontNote', d.frontNote);
+      setNotice(d.notice);
+
+      renderTeamList(d.teamList || [], d.name);
+
+      els.teamList.hidden = true;
+      els.teamList.classList.remove('is-show');
+      els.teamBtn.setAttribute('aria-expanded', 'false');
+      els.teamBtn.textContent = '查看本車名單';
+
+      const itinerary = (d.itinerary == null) ? '' : String(d.itinerary).trim();
+      if (itinerary) {
+        els.itineraryContent.innerHTML = formatItinerary(itinerary);
+        els.itineraryContent.classList.remove('is-empty');
+      } else {
+        els.itineraryContent.innerHTML = '';
+        els.itineraryContent.classList.add('is-empty');
+      }
+      els.itineraryPanel.hidden = true;
+      els.itineraryPanel.classList.remove('is-show');
+      els.itineraryBtn.setAttribute('aria-expanded', 'false');
+      els.itineraryBtn.textContent = '本團行程';
+
+      showEl(els.result);
+      els.resetBtn.hidden = false;
+      els.result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ---------- 事件 ---------- */
+    function searchTrip() {
+      const name = els.input.value.trim();
+      clearError();
+      hideEl(els.result);
+
+      if (!name) {
+        setError('請先輸入姓名');
+        els.input.focus();
+        return;
+      }
+
+      setBusy(true);
+      jsonp({ action: 'search', name: name }, function (res) {
+        setBusy(false);
+        if (!res || !res.success) {
+          setError((res && res.message) ? res.message : '查無資料，請確認姓名是否正確');
+          return;
+        }
+        if (res.settings) applySettings(res.settings);
+        showResult(res.data);
+      }, function (msg) {
+        setBusy(false);
+        setError(msg);
+      });
+    }
+
+    function resetSearch() {
+      els.input.value = '';
+      clearError();
+      hideEl(els.result);
+      els.resetBtn.hidden = true;
+      els.input.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function togglePanel(panel, btn, showText, hideText) {
+      const willShow = panel.hidden;
+      panel.hidden = !willShow;
+      panel.classList.toggle('is-show', willShow);
+      btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+      btn.textContent = willShow ? hideText : showText;
+    }
+
+    els.form.addEventListener('submit', function (e) { e.preventDefault(); searchTrip(); });
+    els.resetBtn.addEventListener('click', resetSearch);
+    els.teamBtn.addEventListener('click', function () {
+      togglePanel(els.teamList, els.teamBtn, '查看本車名單', '收起本車名單');
+    });
+    els.itineraryBtn.addEventListener('click', function () {
+      togglePanel(els.itineraryPanel, els.itineraryBtn, '本團行程', '收起本團行程');
+    });
+    els.input.addEventListener('input', function () {
+      if (els.error.classList.contains('is-show')) clearError();
+    });
+
+    /* ---------- 系統設定（標題 / 提醒 / 頁尾）---------- */
+    function applySettings(s) {
+      if (!s) return;
+      if (s['活動名稱']) {
+        $('eventName').textContent = s['活動名稱'];
+        document.title = s['活動名稱'] + '｜' + (s['主標題'] || '泰精彩之旅');
+      }
+      if (s['主標題']) {
+        // 前 3 個字上金色重點色，其餘維持細體
+        const t = String(s['主標題']);
+        $('mainTitle').innerHTML =
+          '<span class="accent">' + escapeHtml(t.slice(0, 3)) + '</span>' + escapeHtml(t.slice(3));
+      }
+      if (s['英文標題']) $('enTitle').textContent = s['英文標題'];
+      if (s['副標題'])   $('subTitle').textContent = s['副標題'];
+      if (s['旅遊日期']) $('tripDate').textContent = s['旅遊日期'];
+      if (s['首頁標語']) $('slogan').textContent = s['首頁標語'];
+      if (s['頁尾文字']) $('pageFooter').textContent = s['頁尾文字'];
+      if (s['查詢提醒']) {
+        $('searchHint').innerHTML = String(s['查詢提醒']).split(/\r?\n/)
+          .map(function (line) { return escapeHtml(line); }).join('<br>');
+        els.input.placeholder = String(s['查詢提醒']).split(/\r?\n/)[0];
+      }
+    }
+
+    /* ---------- 首頁「本次行程」摺疊區 ---------- */
+    function renderHomeItinerary(list) {
+      const box = $('homeItiContent');
+      if (!list || !list.length) {
+        box.innerHTML = '<span style="color:var(--text-mute)">（尚未設定行程，請至「團別行程」工作表填寫）</span>';
+        return;
+      }
+      // 只有一團就不顯示團名標題
+      const showGroupTitle = list.length > 1;
+      box.innerHTML = list.map(function (it) {
+        return (showGroupTitle ? '<div class="iti-group-title">' + escapeHtml(it.group) + '</div>' : '') +
+               formatItinerary(it.text);
+      }).join('\n\n');
+    }
+
+    const homeItiBtn = $('homeItiBtn');
+    const homeItiPanel = $('homeItiPanel');
+    homeItiBtn.addEventListener('click', function () {
+      const willShow = homeItiPanel.hidden;
+      homeItiPanel.hidden = !willShow;
+      homeItiBtn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+      if (willShow) homeItiPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window.matchMedia && window.matchMedia('(min-width: 720px)').matches) els.input.focus();
+      jsonp({ action: 'settings' }, function (res) {
+        if (!res || !res.success) return;
+        applySettings(res.settings);
+        renderHomeItinerary(res.itineraries);
+      }, function () {
+        $('homeItiContent').innerHTML =
+          '<span style="color:var(--text-mute)">行程載入失敗，請重新整理頁面</span>';
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
