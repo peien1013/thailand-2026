@@ -1374,6 +1374,7 @@
       const team = [d.group, d.busNo].filter(function (v) { return !isEmpty(v); }).join('　');
       $('busTeam').textContent   = team || PLACEHOLDER;
       $('busLeader').textContent = d.leader || PLACEHOLDER;
+      $('busLeader').closest('.bus-cell').hidden = isEmpty(d.leader);
       $('card-bus').hidden = isEmpty(d.group) && isEmpty(d.busNo) && isEmpty(d.leader);
     }
 
