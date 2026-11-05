@@ -571,7 +571,7 @@
       font-size: 11px; font-weight: 500; letter-spacing: .26em;
       color: var(--text-mute); text-transform: uppercase; margin-bottom: 5px;
     }
-    .bus-value { font-size: 20px; font-weight: 500; letter-spacing: .06em; line-height: 1.4; word-break: break-word; }
+    .bus-value { font-size: 20px; font-weight: 500; letter-spacing: .06em; line-height: 1.4; }
     .bus-value.big { font-size: 24px; font-weight: 600; color: var(--accent-deep); }
     .hotel-en { font-size: 13px; font-weight: 400; color: var(--text-mute); letter-spacing: .06em; margin-top: 3px; }
 
@@ -583,24 +583,14 @@
     }
 
     /* ============ 按鈕 / 名單 / 行程 ============ */
-    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
-    .team-btn {
-      width: 100%; padding: 16px; font-family: inherit;
-      font-size: 16px; font-weight: 500; letter-spacing: .24em;
-      color: var(--accent-deep); background: transparent;
-      border: 1px solid var(--accent); border-radius: var(--radius-md);
-      cursor: pointer; transition: background .25s var(--ease);
-    }
-    .team-btn:hover { background: var(--accent-ghost); }
-
-    .team-list, .itinerary-panel { display: none; margin-top: 14px; }
-    .team-list.is-show, .itinerary-panel.is-show { display: block; }
+    .team-list, .itinerary-panel { margin-top: 14px; }
 
     .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
     .team-card {
-      padding: 14px 8px; border-radius: var(--radius-md); background: #fff;
+      padding: 14px 4px; border-radius: var(--radius-md); background: #fff;
       border: 1px solid var(--hairline); text-align: center;
-      font-size: 19px; font-weight: 500; letter-spacing: .06em;
+      font-size: clamp(15px, 4.4vw, 19px); font-weight: 500; letter-spacing: .02em;
+      white-space: nowrap;
     }
     .team-card.is-me { background: var(--accent); color: #fff; border-color: var(--accent); }
 
@@ -614,7 +604,7 @@
     .itinerary-content {
       padding: 22px 24px; border-radius: var(--radius-md); background: #fff;
       border: 1px solid var(--hairline); font-size: 17px; line-height: 1.85;
-      letter-spacing: .04em; white-space: pre-wrap; word-break: break-word;
+      letter-spacing: .04em; white-space: pre-wrap;
     }
     .itinerary-content.is-empty::before {
       content: "（尚未設定本團行程，請至『團別行程』工作表填寫）";
@@ -646,14 +636,31 @@
       .result-header { padding: 30px 22px 22px; }
       .info-area { padding: 22px 18px; }
       .main-title { letter-spacing: .12em; }
-      .action-row { grid-template-columns: 1fr; }
+      .team-cards { grid-template-columns: repeat(3, 1fr); gap: 6px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .loading .spinner { animation: none; }
-      .btn, .team-btn, .input { transition: none; }
+      .btn, .input { transition: none; }
     }
+
+    /* ============ 中文不切字：要嘛整行，要嘛在空格／標點分行 ============ */
+    body { word-break: keep-all; overflow-wrap: anywhere; }
+    .input::placeholder { font-size: clamp(13px, 4vw, 18px); letter-spacing: 0; }
+    .simple-summary {
+      padding: 10px 12px; white-space: nowrap;
+      font-size: clamp(12.5px, 3.8vw, 16px); letter-spacing: .02em;
+    }
+    .hotel-line { white-space: nowrap; font-size: clamp(13px, 4vw, 20px); letter-spacing: 0; }
+    #roomMate { white-space: pre-line; }
+
+    /* ============ 查詢結果：每一區都先縮起來 ============ */
+    .card.acc-card { padding: 0; }
+    .res-acc { margin-top: 10px; }
+    .res-acc[hidden] { display: none; }
+    .res-acc .acc-panel { padding: 0 10px 12px; }
+    .res-acc .acc-panel > :last-child { margin-bottom: 0; }
   </style>
 </head>
 
@@ -1136,16 +1143,11 @@
           <div class="info-content" id="notice"></div>
         </div>
 
-        <div class="action-row">
-          <button class="team-btn" type="button" id="teamBtn" aria-expanded="false" aria-controls="teamList">查看本車名單</button>
-          <button class="team-btn" type="button" id="itineraryBtn" aria-expanded="false" aria-controls="itineraryPanel">本團行程</button>
-        </div>
-
-        <div id="teamList" class="team-list" hidden>
+        <div id="teamList" class="team-list">
           <div id="teamCards" class="team-cards"></div>
         </div>
 
-        <div id="itineraryPanel" class="itinerary-panel" hidden>
+        <div id="itineraryPanel" class="itinerary-panel">
           <div class="itinerary-content" id="itineraryContent">—</div>
         </div>
 
@@ -1176,10 +1178,8 @@
       loading: $('loading'),
       error: $('error'),
       result: $('result'),
-      teamBtn: $('teamBtn'),
       teamList: $('teamList'),
       teamCards: $('teamCards'),
-      itineraryBtn: $('itineraryBtn'),
       itineraryPanel: $('itineraryPanel'),
       itineraryContent: $('itineraryContent')
     };
@@ -1368,7 +1368,11 @@
     function setRoomCard(d) {
       const hotelEl = $('hotel');
       const hotelStr = (d.hotel || '').trim();
-      if (hotelStr.indexOf('/') >= 0) {
+      if (hotelStr.indexOf('／') >= 0) {
+        hotelEl.innerHTML = hotelStr.split('／').map(function (s) {
+          return '<div class="hotel-line">' + escapeHtml(s.trim()) + '</div>';
+        }).join('');
+      } else if (hotelStr.indexOf('/') >= 0) {
         const parts = hotelStr.split('/').map(function (s) { return s.trim(); });
         hotelEl.innerHTML = '<div>' + escapeHtml(parts[0]) + '</div>' +
                             '<div class="hotel-en">' + escapeHtml(parts.slice(1).join(' / ')) + '</div>';
@@ -1381,7 +1385,7 @@
       roomCell.hidden = isEmpty(d.room);
       roomCell.parentElement.classList.toggle('three-col', !isEmpty(d.room));
       $('roomType').textContent = d.roomType || PLACEHOLDER;
-      $('roomMate').textContent = d.roomMate || PLACEHOLDER;
+      $('roomMate').textContent = d.roomMate ? String(d.roomMate).replace(/、/g, '\n') : PLACEHOLDER;
       $('card-room').hidden = isEmpty(d.hotel) && isEmpty(d.room) && isEmpty(d.roomMate);
     }
 
@@ -1467,7 +1471,7 @@
       if (parts.length === 0) {
         tripInfoEl.hidden = true;
       } else {
-        tripInfoEl.textContent = parts.join('　·　');
+        tripInfoEl.textContent = parts.join(' · ');
         tripInfoEl.hidden = false;
       }
 
@@ -1483,11 +1487,6 @@
 
       renderTeamList(d.teamList || [], d.name);
 
-      els.teamList.hidden = true;
-      els.teamList.classList.remove('is-show');
-      els.teamBtn.setAttribute('aria-expanded', 'false');
-      els.teamBtn.textContent = '查看本車名單';
-
       const itinerary = (d.itinerary == null) ? '' : String(d.itinerary).trim();
       if (itinerary) {
         els.itineraryContent.innerHTML = formatItinerary(itinerary);
@@ -1496,10 +1495,7 @@
         els.itineraryContent.innerHTML = '';
         els.itineraryContent.classList.add('is-empty');
       }
-      els.itineraryPanel.hidden = true;
-      els.itineraryPanel.classList.remove('is-show');
-      els.itineraryBtn.setAttribute('aria-expanded', 'false');
-      els.itineraryBtn.textContent = '本團行程';
+      resetResultSections();
 
       showEl(els.result);
       els.resetBtn.hidden = false;
@@ -1542,31 +1538,62 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function togglePanel(panel, btn, showText, hideText) {
-      const willShow = panel.hidden;
-      panel.hidden = !willShow;
-      panel.classList.toggle('is-show', willShow);
-      btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
-      btn.textContent = willShow ? hideText : showText;
+    /* ---------- 查詢結果：每一區都先縮起來，按了才打開 ---------- */
+    const RESULT_SECTIONS = [
+      { title: '說明會與集合',   sub: '行前說明會・第一天集合',     cards: ['card-briefing'] },
+      { title: '去程航班',       sub: '班機・起飛與抵達時間',       cards: ['card-go'] },
+      { title: '回程航班',       sub: '班機・起飛與抵達時間',       cards: ['card-back'] },
+      { title: '車次與本車名單', sub: '我在哪一車・同車有誰',       cards: ['card-bus', 'teamList'] },
+      { title: '住宿與室友',     sub: '飯店・室友是誰、在哪一車',   cards: ['card-room'] },
+      { title: '繳費與應繳金額', sub: '已繳訂金・尾款・小費',       cards: ['card-extra', 'card-payment', 'card-frontNote'] },
+      { title: '注意事項',       sub: '護照・電壓・行李',           cards: ['card-notice'] },
+      { title: '本團行程',       sub: '完整每日行程',               cards: ['itineraryPanel'] }
+    ];
+
+    const resultSections = RESULT_SECTIONS.map(function (sec) {
+      const first = $(sec.cards[0]);
+      const wrap = document.createElement('section');
+      wrap.className = 'card acc-card res-acc anim';
+      wrap.innerHTML =
+        '<button class="acc-btn" type="button" aria-expanded="false">' +
+          '<span class="acc-text">' +
+            '<span class="acc-title">' + sec.title + '</span>' +
+            '<span class="acc-sub">' + sec.sub + '</span>' +
+          '</span>' +
+          '<span class="acc-arrow" aria-hidden="true">▾</span>' +
+        '</button>' +
+        '<div class="acc-panel" hidden></div>';
+      first.parentNode.insertBefore(wrap, first);
+      const btn = wrap.querySelector('.acc-btn');
+      const panel = wrap.querySelector('.acc-panel');
+      sec.cards.forEach(function (id) { panel.appendChild($(id)); });
+      btn.addEventListener('click', function () {
+        const willShow = panel.hidden;
+        panel.hidden = !willShow;
+        btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+      });
+      return { wrap: wrap, btn: btn, panel: panel, cards: sec.cards };
+    });
+
+    function resetResultSections() {
+      resultSections.forEach(function (sec) {
+        sec.panel.hidden = true;
+        sec.btn.setAttribute('aria-expanded', 'false');
+        sec.wrap.hidden = sec.cards.every(function (id) { return $(id).hidden; });
+      });
     }
 
     els.form.addEventListener('submit', function (e) { e.preventDefault(); searchTrip(); });
     els.resetBtn.addEventListener('click', resetSearch);
-    els.teamBtn.addEventListener('click', function () {
-      togglePanel(els.teamList, els.teamBtn, '查看本車名單', '收起本車名單');
-    });
-    els.itineraryBtn.addEventListener('click', function () {
-      togglePanel(els.itineraryPanel, els.itineraryBtn, '本團行程', '收起本團行程');
-    });
     els.input.addEventListener('input', function () {
       if (els.error.classList.contains('is-show')) clearError();
     });
 
     /* ---------- 系統設定（標題 / 提醒 / 頁尾）---------- */
     function applySettings(s) {
+      if (!s) return;
       $('briefingNote').textContent = s['說明會提醒'] || '';
       $('briefingNoteRow').hidden = isEmpty(s['說明會提醒']);
-      if (!s) return;
       if (s['活動名稱']) {
         $('eventName').textContent = s['活動名稱'];
         document.title = s['活動名稱'] + '｜' + (s['主標題'] || '泰精彩之旅');
