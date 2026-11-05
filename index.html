@@ -652,8 +652,9 @@
       padding: 10px 12px; white-space: nowrap;
       font-size: clamp(12.5px, 3.8vw, 16px); letter-spacing: .02em;
     }
-    .hotel-line { white-space: nowrap; font-size: clamp(13px, 4vw, 20px); letter-spacing: 0; }
+    .hotel-line { font-size: clamp(15px, 4.4vw, 20px); letter-spacing: 0; }
     #roomMate { white-space: pre-line; }
+    .bp-code, .bp-city-zh, .bp-airline, .bp-pass-label { white-space: nowrap; }
 
     /* ============ 查詢結果：每一區都先縮起來 ============ */
     .card.acc-card { padding: 0; }
@@ -661,6 +662,16 @@
     .res-acc[hidden] { display: none; }
     .res-acc .acc-panel { padding: 0 10px 12px; }
     .res-acc .acc-panel > :last-child { margin-bottom: 0; }
+    @media (max-width: 480px) {
+      .res-acc .acc-panel { padding: 0 6px 8px; }
+      .res-acc .bus-body { padding: 14px 14px 16px; }
+      .res-acc .info-card { padding: 16px 14px; }
+      .res-acc .itinerary-content { padding: 14px 12px; }
+      .bus-value { font-size: clamp(16px, 4.9vw, 20px); letter-spacing: .02em; }
+      .bp-code { font-size: clamp(30px, 10vw, 40px); }
+      .bp-city-zh { font-size: clamp(12px, 3.6vw, 15px); letter-spacing: 0; }
+      .bp-pass-label { letter-spacing: .08em; }
+    }
   </style>
 </head>
 
@@ -1370,7 +1381,7 @@
       const hotelStr = (d.hotel || '').trim();
       if (hotelStr.indexOf('／') >= 0) {
         hotelEl.innerHTML = hotelStr.split('／').map(function (s) {
-          return '<div class="hotel-line">' + escapeHtml(s.trim()) + '</div>';
+          return '<div class="hotel-line">' + escapeHtml(s.trim().replace(/ /g, ' ')) + '</div>';
         }).join('');
       } else if (hotelStr.indexOf('/') >= 0) {
         const parts = hotelStr.split('/').map(function (s) { return s.trim(); });
