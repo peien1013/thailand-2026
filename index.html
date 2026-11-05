@@ -652,7 +652,8 @@
       padding: 10px 12px; white-space: nowrap;
       font-size: clamp(12.5px, 3.8vw, 16px); letter-spacing: .02em;
     }
-    .hotel-line { font-size: clamp(15px, 4.4vw, 20px); letter-spacing: 0; }
+    .hotel-line { font-size: clamp(13.5px, 4vw, 20px); letter-spacing: 0; }
+    #frontNote { font-size: clamp(14px, 4vw, 17px); }
     #roomMate { white-space: pre-line; }
     .bp-code, .bp-city-zh, .bp-airline, .bp-pass-label { white-space: nowrap; }
 
@@ -1493,7 +1494,7 @@
       setRoomCard(d);
       setTextOrHide('card-extra', 'extra', d.extra);
       setPayment(d.payment);
-      setTextOrHide('card-frontNote', 'frontNote', d.frontNote);
+      setTextOrHide('card-frontNote', 'frontNote', d.frontNote ? String(d.frontNote).replace(/（/g, '\n（') : d.frontNote);
       setNotice(d.notice);
 
       renderTeamList(d.teamList || [], d.name);
