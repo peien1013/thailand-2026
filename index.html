@@ -90,7 +90,18 @@
       font-size: clamp(40px, 7vw, 60px);
       font-weight: 300; letter-spacing: 0.18em; line-height: 1.15;
     }
-    .main-title .accent { font-weight: 500; color: var(--accent-deep); }
+    /* 跟按鈕同節奏的光澤滑過 */
+    .main-title .accent {
+      font-weight: 500; color: var(--accent-deep);
+      background: linear-gradient(100deg, var(--accent-deep) 42%, #F3D98B 50%, var(--accent-deep) 58%);
+      background-size: 300% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleShine 5s ease-in-out infinite;
+    }
+    @keyframes titleShine {
+      0% { background-position: 100% 0; } 55% { background-position: 0% 0; } 100% { background-position: 0% 0; }
+    }
 
     .en-title {
       font-family: "Inter", sans-serif;
@@ -624,11 +635,6 @@
       font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
     }
 
-    @media (min-width: 720px) {
-      .input-wrap { flex-direction: row; }
-      .input { flex: 1.4; }
-      .input-wrap .btn { flex: 1; }
-    }
 
     @media (max-width: 480px) {
       .page { padding: 32px 16px 60px; }
@@ -643,6 +649,7 @@
       html { scroll-behavior: auto; }
       .loading .spinner { animation: none; }
       .btn, .input { transition: none; }
+      .main-title .accent { animation: none; }
     }
 
     /* ============ 中文不切字：要嘛整行，要嘛在空格／標點分行 ============ */
@@ -785,7 +792,7 @@
         <div class="input-wrap">
           <input id="nameInput" name="name" type="text" class="input"
                  autocapitalize="off" autocomplete="off" enterkeyhint="search"
-                 placeholder="請輸入報名時登記的中文姓名" aria-describedby="searchHint" />
+                 placeholder="請輸入姓名" aria-describedby="searchHint" />
           <button id="searchBtn" class="btn" type="submit">開啟我的泰精彩旅程</button>
         </div>
         <button id="resetBtn" class="btn btn-ghost" type="button" hidden>重新查詢</button>
@@ -1625,7 +1632,6 @@
       if (s['查詢提醒']) {
         $('searchHint').innerHTML = String(s['查詢提醒']).split(/\r?\n/)
           .map(function (line) { return escapeHtml(line); }).join('<br>');
-        els.input.placeholder = String(s['查詢提醒']).split(/\r?\n/)[0];
       }
     }
 
