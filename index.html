@@ -1565,7 +1565,8 @@
       { title: '回程航班',       sub: '班機・起飛與抵達時間',       cards: ['card-back'] },
       { title: '車次與本車名單', sub: '我在哪一車・同車有誰',       cards: ['card-bus', 'teamList'] },
       { title: '住宿與室友',     sub: '飯店・室友是誰、在哪一車',   cards: ['card-room'] },
-      { title: '繳費與應繳金額', sub: '已繳訂金・尾款・小費',       cards: ['card-extra', 'card-payment', 'card-frontNote'] },
+      // off: true＝先收起來不顯示（金額待使用者給正確數字後，拿掉 off 就恢復）
+      { title: '繳費與應繳金額', sub: '已繳訂金・尾款・小費',       cards: ['card-extra', 'card-payment', 'card-frontNote'], off: true },
       { title: '注意事項',       sub: '護照・電壓・行李',           cards: ['card-notice'] },
       { title: '本團行程',       sub: '完整每日行程',               cards: ['itineraryPanel'] }
     ];
@@ -1592,14 +1593,14 @@
         panel.hidden = !willShow;
         btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
       });
-      return { wrap: wrap, btn: btn, panel: panel, cards: sec.cards };
+      return { wrap: wrap, btn: btn, panel: panel, cards: sec.cards, off: sec.off };
     });
 
     function resetResultSections() {
       resultSections.forEach(function (sec) {
         sec.panel.hidden = true;
         sec.btn.setAttribute('aria-expanded', 'false');
-        sec.wrap.hidden = sec.cards.every(function (id) { return $(id).hidden; });
+        sec.wrap.hidden = sec.off || sec.cards.every(function (id) { return $(id).hidden; });
       });
     }
 
